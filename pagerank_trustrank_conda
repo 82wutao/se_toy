@@ -5,4 +5,9 @@ https://www.cnblogs.com/rubinorth/p/5799848.html
 
 
 
-conda create -n test python=3.6
+
+conda create -n se python=3.6
+source activate se
+pip install --upgrade pip
+pip install selenium-3.14.1
+pip install beautifulsoup4
