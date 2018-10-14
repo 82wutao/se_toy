@@ -2,6 +2,9 @@
 
 
 from urllib.request import urlopen
+from urllib.request import Request
+
+from urllib.parse import urlencode
 
 class Downloader(object):
     
@@ -10,13 +13,58 @@ class Downloader(object):
         pass
 
 
-    def download(self,url):
-        html = urlopen(url)
-        doc = html.read()
-        html.close()
-        return doc
+    def __request(self,url,form,headers,method):
+        request = Request(url, form, headers)
+        request.get_method = lambda: method
+        response = urlopen(request)
 
+        url = response.geturl()
+        status_code = response.getcode()
+        if status_code != 200:
+            return (url,status_code ,None,None)
+        response_headers = dict(response.info().items())
+        if method == 'HEAD':
+            return (url, status_code, response_headers, None)
+        document = response.read().decode('utf-8')
+        return (url,status_code,response_headers,document)
 
+    '''
+    headers = { 
+    'User-Agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'  ,
+    'Referer':'http://www.zhihu.com/articles' }  
+    '''
+    def get_method(self,url,parameters = None, headers = None):
+        query_parameters = urlencode(parameters) if parameters is not None else u""
+        url = url+"?"+query_parameters
+
+        query_headers = None
+        if headers is None:
+            query_headers = dict()
+        else:
+            query_headers = dict(headers.items())
+
+        return self.__request(url,None,query_headers,'GET')
+
+    def post_method(self,url,form, headers = None):
+        query_parameters = None
+        query_headers = None
+        if form is not None:
+            _parameters = dict(form.items())
+            query_parameters = urlencode(_parameters).encode("utf-8")
+        else:
+            query_parameters = u"".encode("utf-8")
+
+        if headers is None:
+            query_headers = dict()
+        else:
+            query_headers = dict(headers.items())
+        return self.__request(url,query_parameters,query_headers,'POST')
+
+    def head_method(self,url, headers = None):
+        query_headers = None
+        if headers is None:
+            query_headers = dict()
+        return self.__request(url,None,query_headers,'HEAD')
 
 # from bs4 import BeautifulSoup
 

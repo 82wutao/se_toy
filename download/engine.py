@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from download.downloads import Downloader
+from download.parse import parses
 
 if __name__ == "__main__":
     downloader = Downloader("")
-    resp = downloader.download("http://www.sina.com.cn")
-    print(resp.decode('utf-8'))
+    url,code, headers,doc = downloader.get_method("http://www.sina.com.cn")
+    parses.extract_links(doc,3)
 
