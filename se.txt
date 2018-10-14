@@ -1,0 +1,45 @@
+采集
+    只抓取 csdn/oschina/cnblog/segmentfault/zihhu
+    深度优先
+    舆情爬虫一般都是增量式网络爬虫。
+    
+    user-agents/ip-pool/
+
+    urls.txt          种子url集合
+    mini_spider.py    主线程
+    spider.conf       配置文件
+    config_load.py    配置文件加载
+    url_table.py      url队列、url表
+    crawl_thread.py   爬取线程
+    webpage_parse.py  网页分析
+    webpage_save.py   网页存储
+Engine: 引擎负责控制数据流在系统中所有组件中流动，并在相应动作发生时触发事件。
+Scheduler: 调度器从引擎接受Request并将他们入队，以便之后引擎请求他们时提供给引擎。
+Downloader: 下载器负责获取页面数据并提供给引擎，而后提供给Spider。
+Spiders: Spider是Scrapy用户编写的用于分析Response并提取Item或提取更多需要下载的URL的类。 每个Spider负责处理特定网站。
+Item Pipeline: 负责处理被Spider提取出来的Item。典型的功能有清洗、 验证及持久化操作。
+Downloader middlewares: 下载器中间件是在Engine及Downloader之间的特定钩子(specific hooks)，处理Downloader传递给Engine的Response。 其提供了一个简便的机制，通过插入自定义代码来扩展Scrapy功能。
+Spider middlewares: 是在Engine及Spider之间的特定钩子(specific hook)，处理Spider的输入(Response)和输出(Items及Requests)。 其提供了一个简便的机制，通过插入自定义代码来扩展Scrapy功能。
+
+分布式存储
+    不求冗余，
+    只求离散存储，能加快多台机器同事进行解析
+
+
+分布式解析，分词，倒排索引，评估文档对应关键字的评分排序
+    多机器并行
+    正则 提取内容
+    分词
+    建立倒排索引
+pagerank算法
+    能够接受点击的反馈修正
+分布式存储
+    存储关键字和排序好的文档链接
+
+
+检索
+    根据关键字查询文档链接顺序集合
+http 请求呈现
+    请求，响应
+    点击，关键字和顺序修正，重定向
+    根据反馈，修正关键词排序
