@@ -6,12 +6,26 @@ from urllib.request import Request
 
 from urllib.parse import urlencode
 
+
 class Downloader(object):
     
-    def __init__(self, user_agent):
+    def __init__(self, user_agent=None):
         self._agent = user_agent
         pass
 
+    def __merge_useragent_2_headers(self,headers):
+        if headers is None:
+            query_headers = dict()
+        else:
+            query_headers = dict(headers.items())
+
+        if query_headers.get("User-Agent"):
+            return query_headers
+        if self._agent is None:
+            return query_headers
+
+        query_headers["User-Agent"] = self._agent
+        return query_headers
 
     def __request(self,url,form,headers,method):
         request = Request(url, form, headers)
@@ -25,7 +39,7 @@ class Downloader(object):
         response_headers = dict(response.info().items())
         if method == 'HEAD':
             return (url, status_code, response_headers, None)
-        document = response.read().decode('utf-8')
+        document = response.read()
         return (url,status_code,response_headers,document)
 
     '''
@@ -37,33 +51,23 @@ class Downloader(object):
         query_parameters = urlencode(parameters) if parameters is not None else u""
         url = url+"?"+query_parameters
 
-        query_headers = None
-        if headers is None:
-            query_headers = dict()
-        else:
-            query_headers = dict(headers.items())
+        query_headers = self.__merge_useragent_2_headers(headers)
 
         return self.__request(url,None,query_headers,'GET')
 
     def post_method(self,url,form, headers = None):
         query_parameters = None
-        query_headers = None
+        query_headers = self.__merge_useragent_2_headers(headers)
         if form is not None:
             _parameters = dict(form.items())
             query_parameters = urlencode(_parameters).encode("utf-8")
         else:
             query_parameters = u"".encode("utf-8")
 
-        if headers is None:
-            query_headers = dict()
-        else:
-            query_headers = dict(headers.items())
         return self.__request(url,query_parameters,query_headers,'POST')
 
     def head_method(self,url, headers = None):
-        query_headers = None
-        if headers is None:
-            query_headers = dict()
+        query_headers = self.__merge_useragent_2_headers(headers)
         return self.__request(url,None,query_headers,'HEAD')
 
 # from bs4 import BeautifulSoup
