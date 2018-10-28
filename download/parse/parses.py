@@ -21,6 +21,8 @@ def extract_links(raw_url,document,include_pattern = None,exclude_pattern=None):
     returns = []
     for link in links:
         href = link.get("href")
+        if href is None or href.startswith("javascript"):
+            continue
         if href.startswith("/"):
             href = prefix+'/'+href
         if exclude_p is not None and exclude_p.match(href):

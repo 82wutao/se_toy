@@ -12,3 +12,4 @@ pip install --upgrade pip
 pip install selenium-3.14.1
 pip install beautifulsoup4
 pip install bloom-filter
+pip install numpy

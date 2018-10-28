@@ -48,8 +48,7 @@ class Downloader(object):
     'Referer':'http://www.zhihu.com/articles' }  
     '''
     def get_method(self,url,parameters = None, headers = None):
-        query_parameters = urlencode(parameters) if parameters is not None else u""
-        url = url+"?"+query_parameters
+        url = url+"?"+urlencode(parameters) if parameters is not None else url
 
         query_headers = self.__merge_useragent_2_headers(headers)
 
