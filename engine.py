@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from download.downloads import Downloader
-from download.parse import parses
+from common.parse import parses
 from download.config import Agent_Firefox
 
 from store import store
